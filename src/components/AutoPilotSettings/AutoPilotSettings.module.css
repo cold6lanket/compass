@@ -1,0 +1,30 @@
+.container {
+    width: 500px;
+    background-color: #949A9A;
+    color: #fff;
+}
+
+.content {
+    padding: 20px 50px;
+}
+
+.parameter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.parameterName {
+
+}
+
+.parameterBox {
+    width: 100px;
+    height: 40px;
+    background-color: #000000;
+    align-content: center;
+    border-top: 3px solid #9A9C9B;
+	border-left: 3px solid #9A9C9B;
+	border-right: 3px solid #F2F3F5;
+	border-bottom: 3px solid #F2F3F5;
+}
