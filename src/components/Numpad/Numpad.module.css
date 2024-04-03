@@ -1,0 +1,12 @@
+.grid {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100px;
+    height: 100px;
+    background-color: #000;
+}
+
+.active {
+    background-color: red;
+}

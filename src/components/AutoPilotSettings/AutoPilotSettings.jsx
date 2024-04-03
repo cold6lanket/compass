@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import styles from "./AutoPilotSettings.module.css";
 
-// eslint-disable-next-line react/prop-types
 function AutoPilotSettings({ altitude, heading, speed }) {
     // TODO. style parameterBox digits
     return (
@@ -34,5 +34,11 @@ function AutoPilotSettings({ altitude, heading, speed }) {
         </div>
     );
 }
+
+AutoPilotSettings.propTypes = {
+    altitude: PropTypes.number.isRequired,
+    heading: PropTypes.number.isRequired,
+    speed: PropTypes.number.isRequired,
+};
 
 export default AutoPilotSettings;

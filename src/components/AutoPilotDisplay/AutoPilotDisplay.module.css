@@ -2,12 +2,17 @@
     width: 400px;
     background-color: #949A9A;
     color: #fff;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
 
 .content {
-    padding: 40px 50px;
+    padding: 20px 50px;
+}
+
+.innerContent {
+    padding: 20px;
+    background-color: #000;
 }
 
 .parameter {
@@ -17,17 +22,9 @@
 }
 
 .parameterName {
-
+    font-weight: bold;
 }
 
 .parameterBox {
-    width: 100px;
-    height: 40px;
-    background-color: #000000;
-    align-content: center;
-    text-align: center;
-    border-top: 3px solid #9A9C9B;
-	border-left: 3px solid #9A9C9B;
-	border-right: 3px solid #F2F3F5;
-	border-bottom: 3px solid #F2F3F5;
+    font-weight: bold;
 }
