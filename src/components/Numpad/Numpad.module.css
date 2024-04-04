@@ -5,7 +5,40 @@
     width: 100px;
     height: 100px;
     background-color: #000;
+
+    grid-template-areas:
+    "seven eight nine"
+    "four five six"
+    "one two three";
 }
+
+.grid > div:nth-child(1) {
+    grid-area: one;
+  }
+  .grid > div:nth-child(2) {
+    grid-area: two;
+  }
+  .grid > div:nth-child(3) {
+    grid-area: three;
+  }
+  .grid > div:nth-child(4) {
+    grid-area: four;
+  }
+  .grid > div:nth-child(5) {
+    grid-area: five;
+  }
+  .grid > div:nth-child(6) {
+    grid-area: six;
+  }
+  .grid > div:nth-child(7) {
+    grid-area: seven;
+  }
+  .grid > div:nth-child(8) {
+    grid-area: eight;
+  }
+  .grid > div:nth-child(9) {
+    grid-area: nine;
+  }
 
 .active {
     background-color: red;

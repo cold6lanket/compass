@@ -2,21 +2,21 @@ import PropTypes from 'prop-types';
 import styles from "./Numpad.module.css";
 
 function Numpad({ activeIdx }) {
-    const content = [];
+    const cells = [];
 
     for (let i = 0; i < 9; i++) {
         let className;
 
-        if (i === activeIdx) {
+        if (i === activeIdx - 1) {
             className = styles.active;
         }
 
-        content.push(<div key={i} className={className}></div>);
+        cells.push(<div key={i} className={className}></div>);
     }
 
     return (
         <div className={styles.grid}>
-            {content} 
+            {cells} 
         </div>
     );
 }
