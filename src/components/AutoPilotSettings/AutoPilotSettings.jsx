@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { formatHeading } from '../../utils';
 import styles from "./AutoPilotSettings.module.css";
 
 function AutoPilotSettings({ altitude, heading, speed }) {
@@ -19,7 +20,7 @@ function AutoPilotSettings({ altitude, heading, speed }) {
                         <p>Heading</p>
                     </div>
                     <div className={styles.parameterBox}>
-                        {heading}
+                        {formatHeading(heading)}
                     </div>
                 </div>
                 <div className={styles.parameter}>
