@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { formatHeading } from '../../utils';
+import { formatDigits } from '../../utils';
 import styles from "./AutoPilotDisplay.module.css";
 
 function AutoPilotDisplay({ altitude, heading, speed }) {
@@ -20,7 +20,7 @@ function AutoPilotDisplay({ altitude, heading, speed }) {
                             <p>Heading</p>
                         </div>
                         <div className={styles.parameterBox}>
-                            {formatHeading(heading)}
+                            {formatDigits(heading)}
                         </div>
                     </div>
                     <div className={styles.parameter}>
@@ -28,7 +28,7 @@ function AutoPilotDisplay({ altitude, heading, speed }) {
                             <p>Speed</p>
                         </div>
                         <div className={styles.parameterBox}>
-                            {speed}
+                            {formatDigits(speed)}
                         </div>
                     </div>
                 </div>

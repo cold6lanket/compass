@@ -1,12 +1,12 @@
-export function formatHeading(heading) {
+export function formatDigits(value) {
     let prefix = "";
-    if (heading < 10) {
+    if (value < 10) {
         prefix = "00";
-    } else if (heading < 100) {
+    } else if (value < 100) {
         prefix = "0";
     }
 
-    return prefix + heading;
+    return prefix + value;
 }
 
 export const randomIntFromInterval = (min, max) => {
@@ -31,4 +31,14 @@ export const generateRandomNumber = (min, max, step = 10) => {
     const randomNumber = min + (randomIncrement * step);
     
     return randomNumber;
+};
+
+export const countEqualParams = (currentSettings, displaySettings) => {
+    let score = 0;
+    for (const param in displaySettings) {
+        if (currentSettings[param] === displaySettings[param]) {
+            score++;
+        }
+    } 
+    return score;
 };
