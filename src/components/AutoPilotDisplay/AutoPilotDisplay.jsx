@@ -15,7 +15,9 @@ function AutoPilotDisplay({
     heading, 
     speed, 
     editable = false,
-    onChange
+    onChange,
+    onEnter,
+    disable = false
 }) {
     const altitudeRef = useRef(null);
     const headingRef = useRef(null);
@@ -24,10 +26,10 @@ function AutoPilotDisplay({
     useEffect(() => {
         // TODO.
         // This might not be the best solution for focusing on first input during initial render
-        if (editable && !altitude) {
+        if (!disable && editable && !altitude) {
             altitudeRef?.current?.focus();
         }
-    }, [editable, altitude]);
+    }, [editable, altitude, disable]);
 
     return (
         <div className={styles.container}>
@@ -42,10 +44,14 @@ function AutoPilotDisplay({
                                 <Input 
                                     ref={altitudeRef}
                                     onChange={({target}) => onChange({altitude: target.value})} 
-                                    onPressEnter={() => headingRef.current.focus()}
+                                    onPressEnter={({target}) =>{
+                                        onEnter(["altitude", target.value]);
+                                        headingRef.current.focus();
+                                    }}
                                     value={altitude} 
                                     style={inputStyle} 
-                                    variant="borderless" 
+                                    variant="borderless"
+                                    disabled={disable} 
                                 />
                             ) : altitude}
                         </div>
@@ -59,10 +65,14 @@ function AutoPilotDisplay({
                                 <Input
                                     ref={headingRef}
                                     onChange={({target}) => onChange({heading: target.value})}
-                                    onPressEnter={() => speedRef.current.focus()}  
+                                    onPressEnter={({target}) => {
+                                        onEnter(["heading", target.value]);
+                                        speedRef.current.focus();
+                                    }}  
                                     value={heading} 
                                     style={inputStyle} 
-                                    variant="borderless" 
+                                    variant="borderless"
+                                    disabled={disable}  
                                 />
                             ) : formatDigits(heading)}
                         </div>
@@ -76,9 +86,13 @@ function AutoPilotDisplay({
                                 <Input 
                                     ref={speedRef}
                                     onChange={({target}) => onChange({speed: target.value})} 
+                                    onPressEnter={({target}) => {
+                                        onEnter(["speed", target.value]);
+                                    }} 
                                     value={speed} 
                                     style={inputStyle} 
-                                    variant="borderless" 
+                                    variant="borderless"
+                                    disabled={disable}  
                                 />
                             ) : formatDigits(speed)}
                         </div>
@@ -107,7 +121,9 @@ AutoPilotDisplay.propTypes = {
         if ((props['editable'] == true && (props[propName] == undefined || typeof(props[propName]) != 'function'))) {
             return new Error('Please provide a onChange function!');
         }
-    }
+    },
+    onEnter: PropTypes.func,
+    disable: PropTypes.bool
 };
 
 export default AutoPilotDisplay;
