@@ -36,6 +36,8 @@ function SlalomGame() {
 
         const blockSpeed = 1;
         const planeTop = 500;
+        const planeHeight = 50;
+        const planeWidth = 50;
         let bcMainCount = 0;
         let blockBack = 10;
         let planeLeft = 500;
@@ -77,11 +79,11 @@ function SlalomGame() {
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const planeBottom = planeTop + 50;
-            const planeRight = planeLeft + 50;
+            const planeBottom = planeTop + planeHeight;
+            const planeRight = planeLeft + planeWidth;
 
             if (rightPressed) {
-                if (planeLeft < wWidth - 50) {
+                if (planeLeft < wWidth - planeWidth) {
                     planeLeft += 2; 
                 }
             } else if (leftPressed) {
@@ -91,7 +93,7 @@ function SlalomGame() {
             }
 
             // plane    
-            ctx.drawImage(planeImg, planeLeft, planeTop, 50, 50);
+            ctx.drawImage(planeImg, planeLeft, planeTop, planeHeight, planeWidth);
 
             blocks.forEach((block, i) => {
                 if (bcMainCount > (elemHeight * i)) {
