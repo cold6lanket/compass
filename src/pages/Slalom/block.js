@@ -1,8 +1,9 @@
 export class Block {
-    constructor(ctx, x, y) {
+    constructor(ctx, x, y, height) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
+        this.height = height;
         this.initX = x;
         this.initY = y;
     }
@@ -27,8 +28,8 @@ export class Block {
         this.ctx.fillStyle = color;
         this.ctx.beginPath();
         this.ctx.moveTo(x, y);
-        this.ctx.lineTo(x + 10, y + 20);
-        this.ctx.lineTo(x - 10, y + 20);
+        this.ctx.lineTo(x + 10, y + this.height);
+        this.ctx.lineTo(x - 10, y + this.height);
         this.ctx.lineTo(x, y);
         this.ctx.stroke();
         this.ctx.fill();
@@ -37,7 +38,7 @@ export class Block {
     box(x, y, color) {
         this.ctx.fillStyle = color;
         this.ctx.beginPath();
-        this.ctx.rect(x, y, 20, 20);
+        this.ctx.rect(x, y, this.height, this.height);
         this.ctx.stroke();
         this.ctx.fill();
     }

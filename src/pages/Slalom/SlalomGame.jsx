@@ -1,13 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 import { Block } from "./block";
+import { calcResult } from "../../utils";
 import PlaneImg from "../../assets/plane.png";
 
 const GAME_DURATION = 30_000;
 
 function SlalomGame() {
     const [result, setResult] = useState(null);
-    // const [correct, setCorrect] = useState(0);
-    // const [mistake, setMistake] = useState(0);
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
 
@@ -29,8 +28,10 @@ function SlalomGame() {
 
         const blocks = [];
 
+        const elemHeight = 20;
+
         for (let i = 0; i < 12; i++) {
-            blocks.push(new Block(ctx, path[i], -((i * 2) * 20) - 20));
+            blocks.push(new Block(ctx, path[i], -((i * 2) * 20) - 20, elemHeight));
         }
 
         const blockSpeed = 1;
@@ -69,7 +70,7 @@ function SlalomGame() {
 
         let animateId;
         let correct = 0;
-        let mistake = 0;
+        let incorrect = 0;
 
         function animate() {
             animateId = requestAnimationFrame(animate);
@@ -93,23 +94,22 @@ function SlalomGame() {
             ctx.drawImage(planeImg, planeLeft, planeTop, 50, 50);
 
             blocks.forEach((block, i) => {
-                // 20 = height of block
-                if (bcMainCount > (20 * i)) {
+                if (bcMainCount > (elemHeight * i)) {
                     block.top = block.top + blockSpeed;
 
                     const blockLeft = block.left;
                     const blockRight = blockLeft + 150;
 
-                    if ((block.top + 20) > planeTop && block.top < planeBottom) {
+                    if ((block.top + elemHeight) > planeTop && block.top < planeBottom) {
                         if (blockLeft < planeLeft && blockRight > planeRight) {
                             correct++;
                         } else {
-                            mistake++;
+                            incorrect++;
                         }
                     }
 
                     if (block.top > wHeight) {
-                        block.top = -20;
+                        block.top = -elemHeight;
                         blockBack++;
                         block.left = path[blockBack];
                     }
@@ -126,8 +126,7 @@ function SlalomGame() {
             window.removeEventListener("keyup", releasePlane);
             cancelAnimationFrame(animateId);
             
-            const result = Math.round((correct / (correct + mistake)) * 100) + "%";
-            setResult(result);
+            setResult( calcResult(correct, incorrect) );
         }, GAME_DURATION);
 
         return () => {
