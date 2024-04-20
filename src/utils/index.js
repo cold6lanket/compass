@@ -42,3 +42,7 @@ export const countEqualParams = (currentSettings, displaySettings) => {
     } 
     return score;
 };
+
+export const calcResult = (correct, incorrect) => {
+    return Math.round((correct / (correct + incorrect)) * 100) + "%";
+};
