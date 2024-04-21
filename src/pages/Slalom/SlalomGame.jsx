@@ -29,9 +29,10 @@ function SlalomGame() {
         const blocks = [];
 
         const elemHeight = 20;
+        const blockHeight = wHeight / 11;
 
         for (let i = 0; i < 12; i++) {
-            blocks.push(new Block(ctx, path[i], -((i * 2) * 20) - 20, elemHeight));
+            blocks.push(new Block(ctx, path[i], -blockHeight, elemHeight));
         }
 
         const blockSpeed = 1;
@@ -96,13 +97,13 @@ function SlalomGame() {
             ctx.drawImage(planeImg, planeLeft, planeTop, planeHeight, planeWidth);
 
             blocks.forEach((block, i) => {
-                if (bcMainCount > (elemHeight * i)) {
+                if (bcMainCount > (blockHeight * i)) {
                     block.top = block.top + blockSpeed;
 
                     const blockLeft = block.left;
                     const blockRight = blockLeft + 150;
 
-                    if ((block.top + elemHeight) > planeTop && block.top < planeBottom) {
+                    if ((block.top + blockHeight) > planeTop && block.top < planeBottom) {
                         if (blockLeft < planeLeft && blockRight > planeRight) {
                             correct++;
                         } else {
@@ -111,7 +112,7 @@ function SlalomGame() {
                     }
 
                     if (block.top > wHeight) {
-                        block.top = -elemHeight;
+                        block.top = -blockHeight;
                         blockBack++;
                         block.left = path[blockBack];
                     }
