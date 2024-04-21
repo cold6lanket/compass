@@ -1,0 +1,65 @@
+.wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    background-color: #6C6D70;
+    overflow: hidden;
+}
+
+.screw {
+    position: absolute;
+    top: 10px;
+    left: 3%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #adadad; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #adadad 0%, #e1e1e1 51%, #dddddd 68%, #f6f6f6 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#adadad), color-stop(51%,#e1e1e1), color-stop(68%,#dddddd), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(-45deg, #adadad 0%,#e1e1e1 51%,#dddddd 68%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(-45deg, #adadad 0%,#e1e1e1 51%,#dddddd 68%,#f6f6f6 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(-45deg, #adadad 0%,#e1e1e1 51%,#dddddd 68%,#f6f6f6 100%); /* IE10+ */
+    background: linear-gradient(135deg, #adadad 0%,#e1e1e1 51%,#dddddd 68%,#f6f6f6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#adadad', endColorstr='#f6f6f6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    -moz-box-shadow: 0px 2px 4px #000;
+    -webkit-box-shadow: 0px 2px 4px #000;
+    box-shadow: 0px 2px 4px #000, -1px -1px 5px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+
+}
+.indent {
+    height: 3px;
+    width: 11px;
+    margin-top: 3px;
+    /* background-image: url('img/nail-head.jpg'); */
+    -moz-box-shadow: inset 0px 1px 8px #222;
+    -webkit-box-shadow: inset 0px 1px 8px #222;
+    box-shadow: inset 0px 1px 8px #222;
+    transform:rotate(150deg);
+    -ms-transform:rotate(150deg); 
+    -webkit-transform:rotate(150deg);
+    border-radius: 2px;
+    margin-left:-2px;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+.screw:nth-child(2) {
+    bottom: 10px;
+    left: 3%;
+    top: unset;
+}
+
+.screw:nth-child(3) {
+    bottom: unset;
+    left: unset;
+    right: 3%;
+    top: 10px;
+}
+
+.screw:nth-child(4) {
+    bottom: 10px;
+    left: unset;
+    right: 3%;
+    top: unset;
+}
