@@ -5,6 +5,7 @@
     border-radius: 10px;
     background-color: #6C6D70;
     overflow: hidden;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
 .screw {
@@ -62,4 +63,16 @@
     left: unset;
     right: 3%;
     top: unset;
+}
+
+.wrapper .content {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    outline: #414242 solid 3px;
+    overflow: hidden;
 }

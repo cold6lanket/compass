@@ -1,6 +1,7 @@
-import styles from "./Wrapper.module.css";
+import PropTypes from "prop-types";
+import styles from "./Frame.module.css";
 
-function Wrapper() {
+function Frame({ children }) {
     return (
         <div className={styles.wrapper}>
             <div className={styles.screw}>
@@ -15,8 +16,15 @@ function Wrapper() {
             <div className={styles.screw}>
                 <div className={styles.indent}></div>
             </div>
+            <div className={styles.content}>
+                {children}
+            </div>
         </div>
     );
 }
 
-export default Wrapper;
+Frame.propTypes = {
+    children: PropTypes.node
+};
+
+export default Frame;
