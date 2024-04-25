@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import styles from "./Frame.module.css";
 
-function Frame({ children }) {
+function Frame({ children, customClass }) {
     return (
-        <div className={styles.wrapper}>
+        <div className={customClass ? `${styles.wrapper} ${customClass}` : styles.wrapper}>
             <div className={styles.screw}>
                 <div className={styles.indent}></div>
             </div>
@@ -16,15 +16,14 @@ function Frame({ children }) {
             <div className={styles.screw}>
                 <div className={styles.indent}></div>
             </div>
-            <div className={styles.content}>
-                {children}
-            </div>
+            {children}
         </div>
     );
 }
 
 Frame.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
+    customClass: PropTypes.string
 };
 
 export default Frame;

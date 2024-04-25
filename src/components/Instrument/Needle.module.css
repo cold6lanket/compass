@@ -8,6 +8,7 @@
                         4px 4px 10px rgba(0,0,0,0.3); */
     border-radius: 50%;
     position: relative;  
+    
 }
   
 .outer-needle-face {
@@ -115,8 +116,20 @@
     position: absolute;
     width: 30px;
     height: 30px;
-    background-color: red;
     border-radius: 50%;
     top: 42%;
     left: -12%;
+    background: radial-gradient(circle at 30% 30%,red, #760404);
+}
+
+.content {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    outline: #414242 solid 3px;
+    overflow: hidden;
 }
