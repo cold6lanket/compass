@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Block } from "./block";
+import { AnimationFrame } from "./animationFrame";
 import { calcResult } from "../../utils";
 import PlaneImg from "../../assets/plane.png";
 
@@ -35,7 +36,7 @@ function SlalomGame() {
             blocks.push(new Block(ctx, path[i], -blockHeight, elemHeight));
         }
 
-        const blockSpeed = 1;
+        const blockSpeed = 3;
         const planeTop = 500;
         const planeHeight = 50;
         const planeWidth = 50;
@@ -66,18 +67,11 @@ function SlalomGame() {
 
         const planeImg = new Image(); 
         planeImg.src = PlaneImg;
-        
-        planeImg.onload = function() {
-            animate();
-        };
 
-        let animateId;
         let correct = 0;
         let incorrect = 0;
 
         function animate() {
-            animateId = requestAnimationFrame(animate);
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const planeBottom = planeTop + planeHeight;
@@ -85,11 +79,11 @@ function SlalomGame() {
 
             if (rightPressed) {
                 if (planeLeft < wWidth - planeWidth) {
-                    planeLeft += 2; 
+                    planeLeft += 4; 
                 }
             } else if (leftPressed) {
                 if (planeLeft > 0) {
-                    planeLeft -= 2; 
+                    planeLeft -= 4; 
                 }
             }
 
@@ -124,10 +118,16 @@ function SlalomGame() {
             bcMainCount += blockSpeed;
         }
 
+        const slalom = new AnimationFrame(60, animate);
+
+        planeImg.onload = function() {
+            slalom.start();
+        };
+
         const timeoutID = setTimeout(() => {
             window.removeEventListener("keydown", movePlane);
             window.removeEventListener("keyup", releasePlane);
-            cancelAnimationFrame(animateId);
+            slalom.stop();
             
             setResult( calcResult(correct, incorrect) );
         }, GAME_DURATION);
@@ -135,7 +135,7 @@ function SlalomGame() {
         return () => {
             window.removeEventListener("keydown", movePlane);
             window.removeEventListener("keyup", releasePlane);
-            cancelAnimationFrame(animateId);
+            slalom.stop();
             clearTimeout(timeoutID);
         };
     }, []);
