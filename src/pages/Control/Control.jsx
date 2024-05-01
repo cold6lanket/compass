@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import SlipBall from "../../components/Instrument/SlipBall";
 import Needle from "../../components/Instrument/Needle";
 import { generateRandomNumber } from "../../utils";
@@ -15,96 +15,98 @@ function Control() {
 
     // const rTimer = useRef(null);
 
-    useEffect(() => {
-        if (isNeedleRunning) return;
-
-        let target = generateRandomNumber(10, 90, 5);
+    const getNextTarget = useCallback((min, max, step) => {
+        let target = generateRandomNumber(min, max, step);
 
         const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 
         target *= plusOrMinus;
 
-        const timeout = setTimeout(() => {
-            setIsNeedleRunning(true);
-            setMoveNeedle(target);
-        }, 1000);
-
-        return () => {
-            clearTimeout(timeout);
-        }
-    }, [isNeedleRunning]);
+        return target;
+    }, []);
 
     useEffect(() => {
-        if (isBallRunning) return;
+        const tId = setInterval(() => {
+            const nextNeedle = getNextTarget(10, 90, 5);
+            const nextBall = getNextTarget(0, 250, 10);
 
-        const target = generateRandomNumber(0, 250, 10);
-
-        const timeout = setTimeout(() => {
-            setIsBallRunning(true);
-            setMoveBall(target);
-        }, 1000);
+            setMoveNeedle(nextNeedle);
+            setMoveBall(Math.abs(nextBall));
+        }, 5000);
 
         return () => {
-            clearTimeout(timeout);
+            clearInterval(tId);
         };
-    }, [isBallRunning]);
-    
-    useEffect(()=> {
+    }, [getNextTarget]);
 
-        if (isNeedleRunning && !isNaN(moveNeedle)) {
-            let step = 1; 
-
-            const timer = setInterval(() => {
-               
-                setNeedle(prevRotation => {
-                    if (prevRotation < moveNeedle) {
-                        return prevRotation + step
-                    }
-                    return prevRotation - step;
-                });
-
-                // step *= 1.01;
-                
-            }, 50);
-
-            return () => {
-                clearInterval(timer);
-            };
+    useEffect(() => {
+        if (isNeedleRunning) {
+            // user is moving needle, no need to change needle until user stops moving
+            return;
         }
 
-    }, [isNeedleRunning, moveNeedle]);
+        let step = 1;
+        let nId, delay; 
 
-    useEffect(()=> {
+        delay = setTimeout(() => {     
+            nId = setInterval(() => {
+                setNeedle(prevRotation => {
+                    if (Math.round(prevRotation) === moveNeedle) {
+                        return prevRotation;
+                    }
+    
+                    if (prevRotation < moveNeedle) {
+                        return prevRotation + step;
+                    }
+    
+                    return prevRotation - step;
+                });            
+            }, 50);
+        }, 1500);
 
-        if (isBallRunning && !isNaN(moveBall)) {
-            let step = 10; 
+        return () => {
+            clearTimeout(delay);
+            clearInterval(nId);
+        };
+    }, [moveNeedle, isNeedleRunning]);
 
-            const timer = setInterval(() => {
-               
+    useEffect(() => {
+        if (isBallRunning) {
+            return;
+        }
+
+        let step = 10; 
+        let bId, delay;
+
+        delay = setTimeout(() => {
+            bId = setInterval(() => {
                 setBallX(x => {
+                    if (x === moveBall) {
+                        return x;
+                    }
+    
                     if (x < moveBall) {
                         return x + step
                     }
+    
                     return x - step;
-                });
-
-                // step *= 1.01;
-                
+                });   
             }, 50);
+        }, 1500);
 
-            return () => {
-                clearInterval(timer);
-            };
-        }
 
-    }, [isBallRunning, moveBall]);
+        return () => {
+            clearTimeout(delay);
+            clearInterval(bId);
+        };
+    }, [moveBall, isBallRunning]);
 
     useEffect(() => {
         let step = 1;
 
         const incrementNeedle = (n, step) => {
             if (n + step < 90) {
-                return  n + step;
+                return n + step;
             }
             return n;
         };
@@ -137,18 +139,18 @@ function Control() {
 
             if (key === "a") {
                 setNeedle(n => incrementNeedle(n, step));
-                setIsNeedleRunning(false);
+                setIsNeedleRunning(true);
             } else if (key === "z") {
                 setNeedle(n => decrementNeedle(n, step));
-                setIsNeedleRunning(false);
+                setIsNeedleRunning(true);
             }
 
             if (key === "ArrowLeft") {
                 setBallX(x => decrementBall(x, 10));
-                setIsBallRunning(false);
+                setIsBallRunning(true);
             } else if (key === "ArrowRight") {
                 setBallX(x => incrementBall(x, 10));
-                setIsBallRunning(false);
+                setIsBallRunning(true);
             }
 
             step *= 1.05;
@@ -159,11 +161,11 @@ function Control() {
 
             if (key === "a" || key === "z") {
                 step = 1;
-                setIsNeedleRunning(true);
+                setIsNeedleRunning(false);
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight") {
-                setIsBallRunning(true);
+                setIsBallRunning(false);
             }
         };
 
@@ -175,16 +177,6 @@ function Control() {
             window.removeEventListener("keyup", handleKeyUp);
         };
     }, []);
-
-    if (Math.round(needle) === moveNeedle && isNeedleRunning) {
-        setIsNeedleRunning(false);
-        //setMoveNeedle(null);
-    }
-
-    if (Math.round(ballX) === moveBall && isBallRunning) {
-        setIsBallRunning(false);
-        //setMoveBall(null);
-    }
 
     return (
         <div style={{ 
