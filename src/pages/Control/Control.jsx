@@ -1,9 +1,25 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import SlipBall from "../../components/Instrument/SlipBall";
 import Needle from "../../components/Instrument/Needle";
-import { generateRandomNumber } from "../../utils";
+import { generateRandomNumber, calcResult } from "../../utils";
 
-function Control() {
+const containerStyle = {
+    display: "flex", 
+    flexDirection: "column", 
+    gap: "20px", 
+    alignItems: "center",
+    justifyContent: "center"
+};
+
+// TODO. add Gamepad controller support
+
+function Control({
+    invertBall = false, 
+    invertNeedle = false, 
+    isTestOver = false,
+    onResult
+}) {
     const [ballX, setBallX] = useState(280);
     const [needle, setNeedle] = useState(0);
 
@@ -13,7 +29,10 @@ function Control() {
     const [moveNeedle, setMoveNeedle] = useState(30);
     const [moveBall, setMoveBall] = useState(0);
 
-    // const rTimer = useRef(null);
+    const [correct, setCorrect] = useState(0);
+    const [incorrect, setIncorrect] = useState(0);
+
+    const ballRef = useRef(null);
 
     const getNextTarget = useCallback((min, max, step) => {
         let target = generateRandomNumber(min, max, step);
@@ -41,7 +60,7 @@ function Control() {
 
     useEffect(() => {
         if (isNeedleRunning) {
-            // user is moving needle, no need to change needle until user stops moving
+            // user is moving needle, no need to change needle until user stops giving input
             return;
         }
 
@@ -51,6 +70,7 @@ function Control() {
         delay = setTimeout(() => {     
             nId = setInterval(() => {
                 setNeedle(prevRotation => {
+                    // TODO. find better way to handle this case
                     if (Math.round(prevRotation) === moveNeedle) {
                         return prevRotation;
                     }
@@ -81,6 +101,7 @@ function Control() {
         delay = setTimeout(() => {
             bId = setInterval(() => {
                 setBallX(x => {
+                    // TODO. find better way to handle this case
                     if (x === moveBall) {
                         return x;
                     }
@@ -102,24 +123,31 @@ function Control() {
     }, [moveBall, isBallRunning]);
 
     useEffect(() => {
+        const computedStyle = getComputedStyle(ballRef.current);
+
+        let ballBarWidth = ballRef.current.clientWidth; 
+        ballBarWidth -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+
         let step = 1;
 
+        const maxDeg = 90;
+
         const incrementNeedle = (n, step) => {
-            if (n + step < 90) {
+            if (n + step < maxDeg) {
                 return n + step;
             }
             return n;
         };
 
         const decrementNeedle = (n, step) => {
-            if (n - step > -90) {
+            if (n - step > -maxDeg) {
                 return n - step;
             }
             return n;
         };
 
         const incrementBall = (x, step) => {
-            if (x + step + 10 < 340) {
+            if (x + step + 10 < ballBarWidth) {
                 return x + step;
             }
             return x;
@@ -138,18 +166,34 @@ function Control() {
             const key = e.key;
 
             if (key === "a") {
-                setNeedle(n => incrementNeedle(n, step));
+                if (invertNeedle) {
+                    setNeedle(n => decrementNeedle(n, step));
+                } else {
+                    setNeedle(n => incrementNeedle(n, step));
+                }
                 setIsNeedleRunning(true);
             } else if (key === "z") {
-                setNeedle(n => decrementNeedle(n, step));
+                if (invertNeedle) {
+                    setNeedle(n => incrementNeedle(n, step));
+                } else {
+                    setNeedle(n => decrementNeedle(n, step));
+                }
                 setIsNeedleRunning(true);
             }
 
             if (key === "ArrowLeft") {
-                setBallX(x => decrementBall(x, 10));
+                if (invertBall) {
+                    setBallX(x => incrementBall(x, 10));
+                } else {
+                    setBallX(x => decrementBall(x, 10));
+                }
                 setIsBallRunning(true);
             } else if (key === "ArrowRight") {
-                setBallX(x => incrementBall(x, 10));
+                if (invertBall) {
+                    setBallX(x => decrementBall(x, 10));
+                } else {
+                    setBallX(x => incrementBall(x, 10));
+                }
                 setIsBallRunning(true);
             }
 
@@ -176,20 +220,44 @@ function Control() {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, []);
+    }, [invertBall, invertNeedle]);
+
+    useEffect(() => {
+        if (needle >= -10 && needle <= 10) {
+            setCorrect(c => c + 1);
+        } else {
+            setIncorrect(t => t + 1);
+        }
+    }, [needle]);
+
+    useEffect(() => {
+        if (ballX > (342 / 2) - 30 && ballX < (342 / 2) + 30) {
+            setCorrect(c => c + 1);
+        } else {
+            setIncorrect(t => t + 1);
+        }
+    }, [ballX]);
+
+    if (isTestOver) {
+        const result = calcResult(correct, incorrect);
+        if (typeof onResult === "function") {
+            onResult(result);   
+        }
+    }
 
     return (
-        <div style={{ 
-            display: "flex", 
-            flexDirection: "column", 
-            gap: "20px", 
-            alignItems: "center",
-            justifyContent: "center"
-        }}>
+        <div style={containerStyle}>
             <Needle rotate={needle} />
-            <SlipBall ballX={ballX} />
+            <SlipBall ref={ballRef} ballX={ballX} />
         </div>
     );
 }
+
+Control.propTypes = {
+    invertBall: PropTypes.bool,
+    invertNeedle: PropTypes.bool,
+    isTestOver: PropTypes.bool,
+    onResult: PropTypes.func
+};
 
 export default Control;
