@@ -15,7 +15,7 @@ function PlaneGrid({fillCells = {}}) {
             content = fillCells[i] ?? null;
         }
 
-        cells.push(<div className={styles.cell}>{content}</div>);
+        cells.push(<div key={`${i}`} className={styles.cell}>{content}</div>);
     }
 
     return (
