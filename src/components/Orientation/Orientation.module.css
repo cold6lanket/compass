@@ -1,0 +1,46 @@
+.content{
+    width: 620px;
+}
+
+.instruments{
+    display: flex;
+    justify-content: space-between;
+}
+
+.grid {
+    width:100%;
+    height: 400px;
+    display:grid;
+    grid-auto-columns:1fr;
+    grid-auto-rows:1fr;
+    overflow: hidden;
+    background-color: #C2DBF1;
+}
+
+.grid .cell {
+    position: relative;
+    outline: 1px solid #9DC6E9;
+}
+
+.grid .cell:last-child {
+    grid-area: 5/5;
+}
+
+.beacon div:nth-child(1) {
+    position: absolute;
+    height: 100%;
+    width: 12px;
+    background-color: #215C8E;
+    left: calc(50% - 6px);
+    border-radius: 6px;
+}
+
+.beacon div:nth-child(2) {
+    position: absolute;
+    height: 12px;
+    width: 70%;
+    background-color: #215C8E;
+    top: calc(50% - 6px);
+    left: 15%;
+    border-radius: 6px;
+}
