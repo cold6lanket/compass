@@ -1,0 +1,102 @@
+.content {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    outline: #F3F3F3 solid 3px;
+    overflow: hidden;
+}
+
+.needle {
+    width: 100%;
+    height: 100%;
+    border: 7px solid #282828;
+    border-radius: 50%;
+    position: relative;  
+}
+  
+.outer-needle-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: #333333;
+    overflow: hidden;
+}
+  
+  
+.outer-needle-face .marking{
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    background: #C0C0C0;
+    z-index: 0;
+    left: 49%;
+}
+  
+.outer-needle-face .marking {
+    width: 3px;
+}
+  
+.marking.marking-one {
+    -webkit-transform: rotate(11.25deg);
+    -moz-transform: rotate(11.25deg);
+    transform: rotate(11.25deg);
+}
+  
+.marking.marking-two {
+    -webkit-transform: rotate(33.75deg);
+    -moz-transform: rotate(33.75deg);
+    transform: rotate(33.75deg);
+}
+  
+.marking.marking-three {
+    -webkit-transform: rotate(56.25deg);
+    -moz-transform: rotate(56.25deg);
+    transform: rotate(56.25deg);
+}
+
+.marking.marking-four {
+    -webkit-transform: rotate(78.75deg);
+    -moz-transform: rotate(78.75deg);
+    transform: rotate(78.75deg);
+}
+
+.marking.marking-five {
+    -webkit-transform: rotate(101.25deg);
+    -moz-transform: rotate(101.25deg);
+    transform: rotate(101.25deg);
+}
+
+.marking.marking-six {
+    -webkit-transform: rotate(123.75deg);
+    -moz-transform: rotate(123.75deg);
+    transform: rotate(123.75deg);
+}
+.marking.marking-seven {
+    -webkit-transform: rotate(146.25deg);
+    -moz-transform: rotate(146.25deg);
+    transform: rotate(146.25deg);
+}
+.marking.marking-eight {
+    -webkit-transform: rotate(168.75deg);
+    -moz-transform: rotate(168.75deg);
+    transform: rotate(168.75deg);
+}
+  
+.inner-face {
+    position: absolute;
+    top: 6%;
+    left: 6%;
+    width: 88%;
+    height: 88%;
+    background: #282828;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    z-index: 1;
+}

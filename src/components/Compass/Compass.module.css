@@ -1,0 +1,56 @@
+.compass {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.directions{
+    position: absolute;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.west {
+    top: 45%;
+    left: 5%;
+}
+
+.north {
+    top: 5%;
+    left: 45%;
+}
+
+.east {
+    right: 5%;
+    top: 44%;
+}
+
+.south {
+    bottom: 5%;
+    left: 47%;
+}
+
+.line {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    width: 70px;
+    height: 3px;
+    background-color: #FF0000;
+    rotate: 45deg;
+}
+
+.line:before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    transform-origin: 50% 50%;
+    transform: translate(0, -6px) rotate(45deg);
+    box-shadow: inset -3px 3px 0 0 #FF0000;
+}

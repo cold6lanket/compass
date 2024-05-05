@@ -1,0 +1,56 @@
+.content{
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.plane{
+    position: relative;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 70px;
+    background-color: #0000B0;
+}
+
+.plane .wing {
+    position: absolute;
+    top: 21px;
+    left: -28px;
+    height: 3px;
+    width: 60px;
+    background-color: #0000B0;
+}
+
+.plane .tail {
+    position: absolute;
+    bottom: 10px;
+    left: -14px;
+    height: 3px;
+    width: 30px;
+    background-color: #0000B0;
+}
+
+.line {
+    position: absolute;
+    top: 50%;
+    left: 19.5%;
+    width: 90px;
+    height: 3px;
+    background-color: #FF0000;
+    rotate: 45deg;
+}
+
+.line:before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    transform-origin: 50% 50%;
+    transform: translate(0, -6px) rotate(45deg);
+    box-shadow: inset -3px 3px 0 0 #FF0000;
+}
