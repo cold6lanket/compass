@@ -47,7 +47,7 @@
 .center:before, .center:after{
     content: "";
     position: absolute;
-    width: 1.2px;
+    width: 2px;
     height: 10px;
     background: #f3f3f3;
     top: 30%;

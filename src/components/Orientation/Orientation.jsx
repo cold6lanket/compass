@@ -8,7 +8,8 @@ import styles from "./Orientation.module.css";
 function Orientation() {
     const fillCells = { 
         5: <Plane />, 
-        18: <Plane heading={180} pitch={"DOWN"} bankAngle="LEFT" /> 
+        18: <Plane heading={180} pitch={"DOWN"} bankAngle="LEFT" />,
+        24: <Plane heading={270} />
     };
 
     return (

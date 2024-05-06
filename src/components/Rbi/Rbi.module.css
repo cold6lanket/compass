@@ -51,6 +51,6 @@
     width: 12px;
     height: 12px;
     transform-origin: 50% 50%;
-    transform: translate(0, -6px) rotate(45deg);
+    transform: translate(0, -5.5px) rotate(45deg);
     box-shadow: inset -3px 3px 0 0 #FF0000;
 }
