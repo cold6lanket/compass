@@ -21,6 +21,7 @@
 
 .blue.arrow {
     border-bottom: 3px solid #2870B0;
+    width: 57px;
 }
 
 .blue.arrow::after {

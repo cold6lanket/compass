@@ -50,7 +50,7 @@ function getRotation(pitch, bankAngle) {
             rotate = pitchDeg[pitch];
         }
         if (!pitch && bankAngle) {
-            rotate = bankAngleDeg[pitch];
+            rotate = bankAngleDeg[bankAngle];
         }
     }
 

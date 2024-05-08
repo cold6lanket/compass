@@ -20,6 +20,9 @@ function Orientation() {
 
         if (Math.random() > 0.5 ) {
             pitch = Math.random() > 0.5 ? "UP" : "DOWN";
+        }
+
+        if (Math.random() > 0.5 ) {
             bankAngle = Math.random() > 0.5 ? "RIGHT" : "LEFT";
         }
 
@@ -149,10 +152,10 @@ function getAngleRelativeToTower(planeHeading, planeIdx, towerIdx = 12) {
         y = Math.abs(nextRow - planeCoords.row);
 
         let angle = calcAngleDegrees(x, y);
-
-        const quadrant = getQuadrant(towerCoords, planeCoords);
-
-        angle = quadrant - planeHeading - angle;
+        
+        const quadrant = getQuadrant(angle, towerCoords, planeCoords);
+        
+        angle = quadrant - planeHeading;
 
         if (Math.sign(angle) === -1) {
             angle = 360 + angle;
@@ -162,7 +165,7 @@ function getAngleRelativeToTower(planeHeading, planeIdx, towerIdx = 12) {
     }
 }
 
-function getQuadrant(towerCoords, planeCoords) {
+function getQuadrant(angle, towerCoords, planeCoords) {
     const {row: tRow, column: tCol} = towerCoords;
     const {row: pRow, column: pCol} = planeCoords;
 
@@ -170,15 +173,15 @@ function getQuadrant(towerCoords, planeCoords) {
 
     if (pRow < tRow) {
         if (pCol < tCol) {
-            quadrant = 180;
+            quadrant = 90 + angle;
         } else {
-            quadrant = 270;
+            quadrant = 270 - angle;
         }
     } else {
         if (pCol < tCol) {
-            quadrant = 90;
+            quadrant = 90 - angle;
         } else {
-            quadrant = 360;
+            quadrant = 270 + angle;
         }
     }
 
