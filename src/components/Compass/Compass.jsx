@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import Frame from "../Instrument/Frame";
 import IndicatorRing from "../IndicatorRing/IndicatorRing";
+import Arrow from "../../elements/Arrow";
 import styles from "./Compass.module.css";
 
 function Compass({heading = 270}) {
@@ -12,7 +13,7 @@ function Compass({heading = 270}) {
                 <div className={`${styles.directions} ${styles.north}`}>N</div>
                 <div className={`${styles.directions} ${styles.east}`}>E</div>
                 <div className={`${styles.directions} ${styles.south}`}>S</div>
-                <div style={{rotate: `${rotate}deg`}} className={styles.line}></div>
+                <Arrow rotate={rotate} color="red" />
             </IndicatorRing>
         </Frame>
     );

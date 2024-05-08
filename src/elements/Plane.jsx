@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import styles from "./Plane.module.css";
+import Arrow from './Arrow';
 import PlaneImg from "../assets/plane.png";
+import styles from "./Plane.module.css";
 
 function Plane({ heading = 0, pitch, bankAngle }) {
     let line;
@@ -8,8 +9,7 @@ function Plane({ heading = 0, pitch, bankAngle }) {
     if (!pitch && !bankAngle) {
         line = null;
     } else {
-        const lineRotation = `${ pitch2style(pitch) } ${ bankangle2style(bankAngle) }`;
-        line = <div className={`${styles.line} ${lineRotation}`}></div>;
+        line = <Arrow rotate={getRotation(pitch, bankAngle)} />;
     }
 
     return (
@@ -24,22 +24,37 @@ function Plane({ heading = 0, pitch, bankAngle }) {
     );
 }
 
-function pitch2style(pitch) {
-    const styleMapping = {
-        "UP": styles.up,
-        "DOWN": styles.down
+function getRotation(pitch, bankAngle) {
+    let rotate = 0;
+
+    const bankAngleDeg = {
+        "LEFT": 270,
+        "RIGHT": 90
     };
 
-    return styleMapping[pitch] ?? "";
-}
-
-function bankangle2style(bankAngle) {
-    const styleMapping = {
-        "LEFT": styles.left,
-        "RIGHT": styles.right
+    const pitchDeg = {
+        "UP": 0,
+        "DOWN": 180
     };
 
-    return styleMapping[bankAngle] ?? "";
+    if (pitch === "UP" && bankAngle === "RIGHT") {
+        rotate = 45;
+    } else if (pitch === "UP" && bankAngle === "LEFT") {
+        rotate = 315;
+    } else if (pitch === "DOWN" && bankAngle === "RIGHT") {
+        rotate = 135;
+    } else if (pitch === "DOWN" && bankAngle === "LEFT") {
+        rotate = 225;
+    } else {
+        if (pitch && !bankAngle) {
+            rotate = pitchDeg[pitch];
+        }
+        if (!pitch && bankAngle) {
+            rotate = bankAngleDeg[pitch];
+        }
+    }
+
+    return rotate - 90;
 }
 
 Plane.propTypes = {

@@ -6,3 +6,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.title {
+    text-align: center;
+    font-weight: bold;
+    color: #215C8E;
+}

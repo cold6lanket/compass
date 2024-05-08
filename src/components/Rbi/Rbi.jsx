@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import Frame from "../Instrument/Frame";
 import IndicatorRing from "../IndicatorRing/IndicatorRing";
+import Arrow from "../../elements/Arrow";
 import styles from "./Rbi.module.css";
 
 function Rbi({beaconPoint = 45}) {
@@ -12,7 +13,7 @@ function Rbi({beaconPoint = 45}) {
                     <div className={styles.wing}></div>
                     <div className={styles.tail}></div>
                 </div>
-                <div style={{rotate: `${rotate}deg`}} className={styles.line}></div>
+                <Arrow rotate={rotate} color="red" />
             </IndicatorRing>
         </Frame>
     );
