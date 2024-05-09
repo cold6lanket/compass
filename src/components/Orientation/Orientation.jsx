@@ -14,6 +14,7 @@ import {
     calcResult 
 } from "../../utils";
 import styles from "./Orientation.module.css";
+import Timer from "../../elements/Timer";
 
 function Orientation({onFinish}) {
     const [questions] = useState( createQuestions );
@@ -125,22 +126,25 @@ function Orientation({onFinish}) {
                 </Flex>
                 <PlaneGrid fillCells={cells} />
             </div>
-            <Flex vertical gap={20} style={{alignSelf: "end"}}>
-                <Flex align="center" gap={10}>
-                    <Typography.Text>Answer box: </Typography.Text>
-                    <NumberInput 
-                        style={{width: 50}} 
-                        value={answer} 
-                        onChange={setAnswer}
-                    />
+            <Flex vertical justify="space-between">
+                <Timer initialMinutes={10} />
+                <Flex vertical gap={20}>
+                    <Flex align="center" gap={10}>
+                        <Typography.Text>Answer box: </Typography.Text>
+                        <NumberInput 
+                            style={{width: 50}} 
+                            value={answer} 
+                            onChange={setAnswer}
+                        />
+                    </Flex>
+                    <Button 
+                        type="primary"
+                        disabled={!answer} 
+                        onClick={nextQuestion} 
+                    >
+                        {currentQuestionIdx + 1 === qLen ? "Finish" : "Continue"}
+                    </Button>
                 </Flex>
-                <Button 
-                    type="primary"
-                    disabled={!answer} 
-                    onClick={nextQuestion} 
-                >
-                    {currentQuestionIdx + 1 === qLen ? "Finish" : "Continue"}
-                </Button>
             </Flex>
         </Flex>
     );
