@@ -1,10 +1,10 @@
-.content{
-    width: 620px;
+.wrapper {
+    display: flex;
+    gap: 10px;
 }
 
-.instruments{
-    display: flex;
-    justify-content: space-between;
+.content{
+    width: 620px;
 }
 
 .title {

@@ -1,5 +1,8 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
+import { Flex, Typography, Button } from 'antd';
 import Plane from "../../elements/Plane";
+import NumberInput from "../../elements/NumberInput";
 import ArtificialHorizon from "../ArtificialHorizon/ArtificialHorizon";
 import Compass from "../Compass/Compass";
 import PlaneGrid from "../PlaneGrid/PlaneGrid";
@@ -7,13 +10,16 @@ import Rbi from "../Rbi/Rbi";
 import { 
     randomIntFromInterval, 
     generateRandomNumber, 
-    randomIntFromIntervalWithExclusion 
+    randomIntFromIntervalWithExclusion,
+    calcResult 
 } from "../../utils";
 import styles from "./Orientation.module.css";
 
-function Orientation() {
+function Orientation({onFinish}) {
     const [questions] = useState( createQuestions );
     const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
+    const [answer, setAnswer] = useState(null);
+    const [correct, setCorrect] = useState(0);
 
     function getInstrumentData() {
         const heading = generateRandomNumber(0, 360, 45);
@@ -38,6 +44,10 @@ function Orientation() {
             const fillCells = {};
             const exclude = [towerIdx];
 
+            /* TODO. 
+                there might be a case when two planes have same instument readings
+                and placed diagonally on the grid. As this could result in double correct answers
+            */
             for (let j = 0; j < 4; j++) {
                 const idx = randomIntFromIntervalWithExclusion(0, 24, exclude);
                 exclude.push(idx);
@@ -64,6 +74,27 @@ function Orientation() {
         return result;
     }
 
+    const qLen = questions.length;
+
+    function checkAnswer() {
+        const correctAnswer = questions[currentQuestionIdx].correctNth;
+        if (correctAnswer === Number(answer)) {
+            setCorrect(c => c + 1);
+        }
+    }
+
+    function nextQuestion() {
+        checkAnswer();
+        if (qLen > currentQuestionIdx + 1) {
+            setCurrentQuestionIdx(q => q + 1);
+        } else {
+            if (typeof onFinish === "function") {
+                onFinish(calcResult(correct, qLen - correct));
+            }
+        }
+        setAnswer(null);
+    }
+
     const {instruments, fillCells} = questions[currentQuestionIdx];
 
     const cells = {...fillCells};
@@ -73,28 +104,51 @@ function Orientation() {
     }
 
     return (
-        <div className={styles.content}>
-            <div className={styles.instruments}>
-                <div>
-                    <Rbi beaconPoint={instruments.beaconPoint} />
-                    <div className={styles.title}>RBI</div>
-                </div>
-                <div>
-                    <ArtificialHorizon 
-                        pitch={instruments.pitch} 
-                        bankAngle={instruments.bankAngle} 
-                    />
-                    <div className={styles.title}>Artificial Horizon</div>
-                </div>
-                <div>
-                    <Compass heading={instruments.heading} />
-                    <div className={styles.title}>Compass</div>
-                </div>
+        <Flex gap={30}>
+            <div className={styles.content}>
+                <Flex justify="space-between">
+                    <div>
+                        <Rbi beaconPoint={instruments.beaconPoint} />
+                        <div className={styles.title}>RBI</div>
+                    </div>
+                    <div>
+                        <ArtificialHorizon 
+                            pitch={instruments.pitch} 
+                            bankAngle={instruments.bankAngle} 
+                        />
+                        <div className={styles.title}>Artificial Horizon</div>
+                    </div>
+                    <div>
+                        <Compass heading={instruments.heading} />
+                        <div className={styles.title}>Compass</div>
+                    </div>
+                </Flex>
+                <PlaneGrid fillCells={cells} />
             </div>
-            <PlaneGrid fillCells={cells} />
-        </div>
+            <Flex vertical gap={20} style={{alignSelf: "end"}}>
+                <Flex align="center" gap={10}>
+                    <Typography.Text>Answer box: </Typography.Text>
+                    <NumberInput 
+                        style={{width: 50}} 
+                        value={answer} 
+                        onChange={setAnswer}
+                    />
+                </Flex>
+                <Button 
+                    type="primary"
+                    disabled={!answer} 
+                    onClick={nextQuestion} 
+                >
+                    {currentQuestionIdx + 1 === qLen ? "Finish" : "Continue"}
+                </Button>
+            </Flex>
+        </Flex>
     );
 }
+
+Orientation.propTypes = {
+    onFinish: PropTypes.func
+};
 
 export default Orientation;
 
