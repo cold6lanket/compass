@@ -3,7 +3,7 @@ import Arrow from './Arrow';
 import PlaneImg from "../assets/plane.png";
 import styles from "./Plane.module.css";
 
-function Plane({ heading = 0, pitch, bankAngle }) {
+function Plane({ nth, heading = 0, pitch, bankAngle }) {
     let line;
 
     if (!pitch && !bankAngle) {
@@ -14,6 +14,7 @@ function Plane({ heading = 0, pitch, bankAngle }) {
 
     return (
         <div className={styles.planeWrapper}>
+            {nth}
             <img 
                 style={{rotate: `${heading}deg`}} 
                 src={PlaneImg} 
@@ -58,6 +59,10 @@ function getRotation(pitch, bankAngle) {
 }
 
 Plane.propTypes = {
+    nth: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.oneOf([undefined])
+    ]),
     heading: PropTypes.number,
     pitch:  PropTypes.oneOf(['UP', 'DOWN', null, undefined]),
     bankAngle: PropTypes.oneOf(['RIGHT', 'LEFT', null, undefined])

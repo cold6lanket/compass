@@ -1,46 +1,76 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Plane from "../../elements/Plane";
 import ArtificialHorizon from "../ArtificialHorizon/ArtificialHorizon";
 import Compass from "../Compass/Compass";
 import PlaneGrid from "../PlaneGrid/PlaneGrid";
 import Rbi from "../Rbi/Rbi";
-import { randomIntFromInterval, generateRandomNumber } from "../../utils";
+import { 
+    randomIntFromInterval, 
+    generateRandomNumber, 
+    randomIntFromIntervalWithExclusion 
+} from "../../utils";
 import styles from "./Orientation.module.css";
 
 function Orientation() {
-    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [questions] = useState( createQuestions );
+    const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
 
-    const {instruments, fillCells} = useMemo(() => {
-        const acc = {};
-
-        const idx = randomIntFromInterval(0, 24);
-
-        const pHeading = generateRandomNumber(0, 360, 45);
+    function getInstrumentData() {
+        const heading = generateRandomNumber(0, 360, 45);
         let pitch, bankAngle;
 
-        if (Math.random() > 0.5 ) {
+        if (Math.random() > 0.5) {
             pitch = Math.random() > 0.5 ? "UP" : "DOWN";
         }
 
-        if (Math.random() > 0.5 ) {
+        if (Math.random() > 0.5) {
             bankAngle = Math.random() > 0.5 ? "RIGHT" : "LEFT";
         }
 
-        acc[idx] = <Plane heading={pHeading} pitch={pitch} bankAngle={bankAngle} />;
+        return {heading, pitch, bankAngle};
+    }
 
-        return { instruments: {
-            beaconPoint: getAngleRelativeToTower(pHeading, idx),
-            heading: pHeading,
-            pitch,
-            bankAngle
-        }, fillCells: acc };
-    }, []);
+    function createQuestions(n = 30) {
+        const result = [];
+        const towerIdx = 12;
 
-    // const fillCells = { 
-    //     5: <Plane />, 
-    //     18: <Plane heading={180} pitch={"DOWN"} bankAngle="LEFT" />,
-    //     24: <Plane heading={270} />
-    // };
+        for (let i = 0; i < n; i++) {
+            const fillCells = {};
+            const exclude = [towerIdx];
+
+            for (let j = 0; j < 4; j++) {
+                const idx = randomIntFromIntervalWithExclusion(0, 24, exclude);
+                exclude.push(idx);
+                fillCells[idx] = getInstrumentData();
+            }
+            const idx = randomIntFromInterval(0, 3);
+            const correctIdx = Number( Object.keys(fillCells)[idx] );
+
+            const instruments = {
+                ...fillCells[correctIdx],
+                beaconPoint: getAngleRelativeToTower(fillCells[correctIdx].heading, correctIdx)
+            };
+
+            let sortKs = Object.keys(fillCells).sort((a, b) => Number(a) - Number(b));
+            sortKs = Object.fromEntries( sortKs.map((k, i) => [k, i + 1]) );
+
+            for (const k in sortKs) {
+                fillCells[k].nth = sortKs[k];
+            }
+
+            result.push({fillCells, instruments, correctNth: sortKs[correctIdx]});
+        }
+
+        return result;
+    }
+
+    const {instruments, fillCells} = questions[currentQuestionIdx];
+
+    const cells = {...fillCells};
+
+    for (const k in cells) {
+        cells[k] = <Plane {...cells[k]} />;
+    }
 
     return (
         <div className={styles.content}>
@@ -61,7 +91,7 @@ function Orientation() {
                     <div className={styles.title}>Compass</div>
                 </div>
             </div>
-            <PlaneGrid fillCells={fillCells} />
+            <PlaneGrid fillCells={cells} />
         </div>
     );
 }
