@@ -46,8 +46,8 @@ function Orientation({onFinish}) {
             const exclude = [towerIdx];
 
             /* TODO. 
-                there might be a case when two planes have same instument readings
-                and placed diagonally on the grid. As this could result in double correct answers
+                there might be a case when two planes have same instrument readings
+                and placed diagonally or orthogonally on the grid. As this could result in double correct answers
             */
             for (let j = 0; j < 4; j++) {
                 const idx = randomIntFromIntervalWithExclusion(0, 24, exclude);
@@ -84,14 +84,18 @@ function Orientation({onFinish}) {
         }
     }
 
+    function doFinish() {
+        if (typeof onFinish === "function") {
+            onFinish(calcResult(correct, qLen - correct));
+        }
+    }
+
     function nextQuestion() {
         checkAnswer();
         if (qLen > currentQuestionIdx + 1) {
             setCurrentQuestionIdx(q => q + 1);
         } else {
-            if (typeof onFinish === "function") {
-                onFinish(calcResult(correct, qLen - correct));
-            }
+            doFinish();
         }
         setAnswer(null);
     }
@@ -127,7 +131,7 @@ function Orientation({onFinish}) {
                 <PlaneGrid fillCells={cells} />
             </div>
             <Flex vertical justify="space-between">
-                <Timer initialMinutes={10} />
+                <Timer initialMinutes={10} onTimerUp={doFinish} />
                 <Flex vertical gap={20}>
                     <Flex align="center" gap={10}>
                         <Typography.Text>Answer box: </Typography.Text>

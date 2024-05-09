@@ -12,6 +12,7 @@ const Timer = ({
         m: initialMinutes,
         s: initialSeconds,
     });
+    const [isExpired, setIsExpired] = useState(false);
     const timerRef = useRef(null);
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const Timer = ({
 
                 if (time.s === 0) {
                     if (time.h === 0 && time.m === 0) {
-                        onTimerUp?.();
+                        setIsExpired(true);
                         clearInterval(timerRef.current);
                     } else if (time.m > 0) {
                         updatedTime.m--;
@@ -41,7 +42,13 @@ const Timer = ({
         }, 1000);
 
         return () => clearInterval(timerRef.current);
-    }, [onTimerUp]);
+    }, []);
+
+    useEffect(() => {
+        if (isExpired) {
+            onTimerUp?.();
+        }
+    }, [isExpired, onTimerUp]);
 
     return (
         <div>
