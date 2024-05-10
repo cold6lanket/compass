@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.content{
+    width: 620px;
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+    color: #215C8E;
+}

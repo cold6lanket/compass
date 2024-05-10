@@ -13,6 +13,17 @@ export const randomIntFromInterval = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+export const randomIntFromIntervalWithExclusion = (min, max, excludeArray = []) => {
+    const excludedSet = new Set(excludeArray);
+    let randomNum;
+
+    do {
+        randomNum = randomIntFromInterval(min, max);
+    } while (excludedSet.has(randomNum));
+
+    return randomNum;
+};
+
 export const areNumbers = (num1, num2) => {
     return typeof num1 === "number" && typeof num2 === "number";
 };

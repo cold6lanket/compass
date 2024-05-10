@@ -1,0 +1,29 @@
+.arrow {
+    position: absolute;
+    top: 50%;
+    left: 26%;
+    width: 70px;
+    height: 0;
+    border-bottom: 3px solid #FF0000;
+}
+
+.arrow::after {	
+    content: '';
+    width: 0; 
+    height: 0; 
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 16px solid #FF0000;
+    position: absolute;
+    right: -10px;
+    top: -7.25px;
+}
+
+.blue.arrow {
+    border-bottom: 3px solid #2870B0;
+    width: 57px;
+}
+
+.blue.arrow::after {
+    border-left: 16px solid #2870B0;
+}
