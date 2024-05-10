@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Typography } from 'antd';
 import PropTypes from "prop-types";
 
 const Timer = ({
@@ -51,14 +52,19 @@ const Timer = ({
     }, [isExpired, onTimerUp]);
 
     return (
-        <div>
-            <h1>
+        <div style={{
+            backgroundColor: "#FFFD14", 
+            width: "70px",
+            textAlign: "center",
+            border: "1px solid"
+        }}>
+            <Typography.Title style={{ margin: 0 }} level={4}>
                 {time.h < 10 && time.h !== 0
                     ? `0${time.h}:`
                     : time.h >= 10 && `${time.h}:`}
                 {time.m < 10 ? `0${time.m}` : time.m}:
                 {time.s < 10 ? `0${time.s}` : time.s}
-            </h1>
+            </Typography.Title>
         </div>
     );
 };

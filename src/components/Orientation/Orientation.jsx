@@ -40,6 +40,7 @@ function Orientation({onFinish}) {
     function createQuestions(n = 30) {
         const result = [];
         const towerIdx = 12;
+        const grid = getPlaneGrid();
 
         for (let i = 0; i < n; i++) {
             const fillCells = {};
@@ -56,10 +57,11 @@ function Orientation({onFinish}) {
             }
             const idx = randomIntFromInterval(0, 3);
             const correctIdx = Number( Object.keys(fillCells)[idx] );
+            const beaconPoint = getAngleRelativeToTower(grid, fillCells[correctIdx].heading, correctIdx);
 
             const instruments = {
                 ...fillCells[correctIdx],
-                beaconPoint: getAngleRelativeToTower(fillCells[correctIdx].heading, correctIdx)
+                beaconPoint
             };
 
             let sortKs = Object.keys(fillCells).sort((a, b) => Number(a) - Number(b));
@@ -181,8 +183,7 @@ function getPlaneGrid() {
     return grid;
 }
 
-function getAngleRelativeToTower(planeHeading, planeIdx, towerIdx = 12) {
-    const grid = getPlaneGrid();
+function getAngleRelativeToTower(grid, planeHeading, planeIdx, towerIdx = 12) {
     const towerCoords = findCellCoords(grid, towerIdx);
     const planeCoords = findCellCoords(grid, planeIdx);
 
