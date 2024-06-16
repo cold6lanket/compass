@@ -9,6 +9,11 @@ import {
 } from '@ant-design/icons';
 import TaskManager from './pages/TaskManager/TaskManager';
 // import TaskManagerGame from './pages/TaskManager/TaskManagerGame';
+import Compass from './components/Compass/Compass';
+import ArtificialHorizon from './components/ArtificialHorizon/ArtificialHorizon';
+import Rbi from './components/Rbi/Rbi';
+import Orientation from './components/Orientation/Orientation';
+
 
 function getItem(label, key, icon, children) {
     return {
@@ -49,7 +54,12 @@ function App() {
                 position:"relative"
                 }}
             >
-                <TaskManager />
+                {/* <div style={{display: "flex", justifyContent: "space-around"}}>
+                    <Rbi/>
+                    <ArtificialHorizon />
+                    <Compass />
+                </div> */}
+                <Orientation />
             </Content>
         </Layout>
     </Layout>

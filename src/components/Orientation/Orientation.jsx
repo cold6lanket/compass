@@ -7,14 +7,15 @@ import ArtificialHorizon from "../ArtificialHorizon/ArtificialHorizon";
 import Compass from "../Compass/Compass";
 import PlaneGrid from "../PlaneGrid/PlaneGrid";
 import Rbi from "../Rbi/Rbi";
+import Timer from "../../elements/Timer";
 import { 
     randomIntFromInterval, 
     generateRandomNumber, 
     randomIntFromIntervalWithExclusion,
     calcResult 
 } from "../../utils";
+import { MAX_HEADING } from "../../utils/constants";
 import styles from "./Orientation.module.css";
-import Timer from "../../elements/Timer";
 
 function Orientation({onFinish}) {
     const [questions] = useState( createQuestions );
@@ -23,7 +24,7 @@ function Orientation({onFinish}) {
     const [correct, setCorrect] = useState(0);
 
     function getInstrumentData() {
-        const heading = generateRandomNumber(0, 360, 45);
+        const heading = generateRandomNumber(0, MAX_HEADING, 45);
         let pitch, bankAngle;
 
         if (Math.random() > 0.5) {
@@ -46,25 +47,72 @@ function Orientation({onFinish}) {
             const fillCells = {};
             const exclude = [towerIdx];
 
-            /* TODO. 
-                there might be a case when two planes have same instrument readings
-                and placed diagonally or orthogonally on the grid. As this could result in double correct answers
-            */
             for (let j = 0; j < 4; j++) {
                 const idx = randomIntFromIntervalWithExclusion(0, 24, exclude);
                 exclude.push(idx);
                 fillCells[idx] = getInstrumentData();
             }
             const idx = randomIntFromInterval(0, 3);
-            const correctIdx = Number( Object.keys(fillCells)[idx] );
+            const cells = Object.keys(fillCells);
+            const correctIdx = Number( cells[idx] );
             const beaconPoint = getAngleRelativeToTower(grid, fillCells[correctIdx].heading, correctIdx);
+
+            let previousCell, offsets;
+            const {row, col} = getRowCol(correctIdx);
+            
+            if (isDiagonal(correctIdx)) {
+                if (correctIdx < towerIdx) {
+                    offsets = [-1, 1, 1, -1];
+                    if (col < 2) {
+                        offsets = [-1, -1, 1, 1];
+                    }
+                } else {
+                    offsets = [1, 1, -1, -1];
+                    if (col < 2) {
+                        offsets = [1, -1, -1, 1];
+                    }
+                }
+                
+            } else if (isCenterLine(correctIdx)) {
+                const {row: tRow, col: tCol} = getRowCol(towerIdx);
+                if (row > tRow) {
+                    // 17, 22
+                    offsets = [1, 0, -1, 0];
+                } else if (row === tRow) {
+                    if (col < tCol) {
+                        // 10, 11
+                        offsets = [0, -1, 0, 1];
+                    } else {
+                        // 13, 14
+                        offsets = [0, 1, 0, -1];
+                    }
+                } else {
+                    // 2, 7
+                    offsets = [-1, 0, 1, 0];
+                }
+            }
+
+            previousCell = offsets ? getPreviousCell(grid, row, col, ...offsets) : undefined;
+
+            if (previousCell in fillCells) {
+                // check instrument similarity
+                if (areSameInstrumentReadings(fillCells[previousCell], fillCells[correctIdx])) {
+                    let next = {};
+                    do {
+                        next = getInstrumentData();
+                    } while (next.pitch === fillCells[correctIdx].pitch || next.bankAngle === fillCells[correctIdx].bankAngle);
+
+                    fillCells[previousCell].pitch = next.pitch;
+                    fillCells[previousCell].bankAngle = next.bankAngle;
+                }
+            }
 
             const instruments = {
                 ...fillCells[correctIdx],
                 beaconPoint
             };
 
-            let sortKs = Object.keys(fillCells).sort((a, b) => Number(a) - Number(b));
+            let sortKs = cells.sort((a, b) => Number(a) - Number(b));
             sortKs = Object.fromEntries( sortKs.map((k, i) => [k, i + 1]) );
 
             for (const k in sortKs) {
@@ -295,4 +343,57 @@ function findCellCoords(grid, target) {
 
 function calcAngleDegrees(x, y) {
     return (Math.atan2(y, x) * 180) / Math.PI;
+}
+
+function getRowCol(index) {
+    // gridSize = 5
+    const row = Math.floor(index / 5);
+    const col = index % 5;
+    return { row, col };
+}
+
+function isDiagonal(index) {
+    const { row, col } = getRowCol(index);
+
+    // Check main diagonal (top-left to bottom-right)
+    if (row === col) {
+        return true;
+    }
+
+    // Check anti-diagonal (top-right to bottom-left)
+    if (row + col === 5 - 1) {
+        return true;
+    }
+
+    return false;
+}
+
+function isCenterLine(index) {
+    const { row, col } = getRowCol(index);
+
+    // Check if in the center row or center column
+    if (row === Math.floor(5 / 2) || col === Math.floor(5 / 2)) {
+        return true;
+    }
+
+    return false;
+}
+
+function getPreviousCell(grid, row, col, rowOffset1, colOffset1, rowOffset2, colOffset2) {
+    let cell = grid[row + rowOffset1]?.[col + colOffset1];
+
+    if (cell === undefined) {
+      cell = grid[row + rowOffset2]?.[col + colOffset2];
+    }
+
+    return cell;
+}
+
+function areSameInstrumentReadings(cell1, cell2) {
+    for (const p in cell1) {
+        if (cell1[p] !== cell2[p]) {
+            return false;
+        }
+    }
+    return true;
 }

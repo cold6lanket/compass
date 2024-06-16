@@ -140,10 +140,12 @@ function SlalomGame() {
         };
     }, []);
 
-    if (result) {
-        // TODO. game is over. Proceed to result page.
-        console.log("Result: " + result);
-    }
+    useEffect(() => {
+        if (result) {
+            // TODO. game is over. Proceed to result page.
+            console.log("Result: " + result);
+        }
+    }, [result]);
 
     return (
         <div ref={containerRef}>

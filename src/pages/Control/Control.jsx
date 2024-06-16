@@ -238,12 +238,14 @@ function Control({
         }
     }, [ballX]);
 
-    if (isTestOver) {
-        const result = calcResult(correct, incorrect);
-        if (typeof onResult === "function") {
-            onResult(result);   
+    useEffect(() => {
+        if (isTestOver) {
+            const result = calcResult(correct, incorrect);
+            if (typeof onResult === "function") {
+                onResult(result);   
+            }
         }
-    }
+    }, [isTestOver, correct, incorrect, onResult]);
 
     return (
         <div style={containerStyle}>

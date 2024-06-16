@@ -1,11 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { Typography } from 'antd';
-import AutoPilotDisplay from "../../components/AutoPilotDisplay";
-import { generateRandomNumber } from "../../utils";
+import AutoPilotDisplay from "../AutoPilotDisplay";
+import { generateRandomNumber, calcResult } from "../../utils";
 import { MAX_ALTITUDE, MAX_HEADING, MAX_SPEED } from "../../utils/constants";
 import styles from "./MemoryGame.module.css";
-
-const { Title } = Typography;
 
 const QUESTION_COUNT = 10;
 const GUESS_TIMEOUT = 10_000;
@@ -116,16 +114,23 @@ function MemoryGame() {
         titleClass = styles.titleBlink;
     }
 
-    if (isGameOver) {
-        let result = (score / (QUESTION_COUNT * 3)) * 100;
-        result = Math.round(result) + "%";
-        alert("Result: " + result);
-    }
+    useEffect(() => {
+        if (isGameOver) {
+            const result = calcResult(score, (QUESTION_COUNT * 3) - score);
+            alert("Result: " + result);
+        }
+    }, [isGameOver, score]);
 
     return (
         <div className={styles.wrapper}>
             <div>
-                <Title type="warning" level={4} className={titleClass}>Enter new settings</Title>
+                <Typography.Title 
+                    type="warning" 
+                    level={4} 
+                    className={titleClass}
+                >
+                    Enter new settings
+                </Typography.Title>
                 <AutoPilotDisplay 
                     {...settings} 
                     onEnter={handleEnter}
