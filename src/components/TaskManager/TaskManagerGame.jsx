@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from 'prop-types';
-import Numpad from "../../components/Numpad";
-import AutoPilotDisplay from "../../components/AutoPilotDisplay";
-import AutoPilotSettings from "../../components/AutoPilotSettings";
+import Numpad from "../Numpad";
+import AutoPilotDisplay from "../AutoPilotDisplay";
+import AutoPilotSettings from "../AutoPilotSettings";
 import { 
     randomIntFromInterval, 
     areNumbers, 
